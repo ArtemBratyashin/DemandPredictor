@@ -9,7 +9,7 @@ period = 12
 df = df.reset_index(drop=True)
 df['month_index'] = np.arange(len(df))
 df['sin_season'] = np.sin(2 * np.pi * df['month_index'] / period)
-df['cos_season'] = np.cos(2 * np.pi * df['month_index'] / period)
+df['cos_season'] = -np.cos(2 * np.pi * df['month_index'] / period)
 
 for col in df.columns[1:]:
     df[f'{col}_lag1'] = df[col].shift(1)
