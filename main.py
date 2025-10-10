@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import xgboost as xgb
 
-df = pd.read_excel('Data.xlsx', sheet_name='Данные')
+df = pd.read_excel('data/data.xlsx', sheet_name='Данные')
 df['Время'] = pd.to_datetime(df['Время'])
 
 period = 12
