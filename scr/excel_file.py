@@ -6,13 +6,14 @@ from pathlib import Path
 Processes Excel data from raw folder with time series transformations.
 
 Example:
-    prepared_data = (DataProcessor("../data/raw.xlsx", "Данные")
-                    .process_time()
-                    .add_sin_seasonality(period=12)
-                    .add_cos_seasonality(period=12)
-                    .add_lags()
-                    .prepare_for_save()
-                    )
+    df = (
+        DataProcessor("../data/raw.xlsx", "Данные")
+        .process_time()
+        .add_sin_seasonality(period=12)
+        .add_cos_seasonality(period=12)
+        .add_lags()
+        .prepared_data()
+    )
 """
 
 class excel_file:
@@ -57,8 +58,8 @@ class excel_file:
         return self
 
     """
-    Removes NaN values and resets index for clean dataset ready for saving.
+    Removes NaN values and resets index for transfer to dataframe.
     """
-    def prepare_for_save(self):
+    def prepared_data(self):
         self.__data = self.__data.dropna().reset_index(drop=True)
-        return self
+        return self.__data
