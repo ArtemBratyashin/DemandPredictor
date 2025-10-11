@@ -6,8 +6,7 @@ from pathlib import Path
 Processes Excel data from raw folder with time series transformations.
 
 Example:
-    repared_data = (DataProcessor("../data/raw.xlsx", "Данные")
-                    .load()
+    prepared_data = (DataProcessor("../data/raw.xlsx", "Данные")
                     .process_time()
                     .add_sin_seasonality(period=12)
                     .add_cos_seasonality(period=12)
@@ -16,21 +15,12 @@ Example:
                     )
 """
 
-class DataProcessor:
+class excel_file:
 
     def __init__(self, path, sheet):
         self.__path = Path(path)
         self.__sheet = sheet
-        self.__data = None
-
-    """
-    Loads Excel data from specified path and sheet.
-    """
-    def load(self):
-        if not self.__path.exists():
-            raise FileNotFoundError(f"Excel file not found at {self.__path}")
         self.__data = pd.read_excel(self.__path, sheet_name=self.__sheet)
-        return self
 
     """
     Converts time column to datetime format.
