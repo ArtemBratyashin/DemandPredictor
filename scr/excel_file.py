@@ -13,6 +13,7 @@ Example:
                     .add_cos_seasonality(period=12)
                     .add_lags()
                     .prepare_for_save()
+                    )
 """
 
 class DataProcessor:
