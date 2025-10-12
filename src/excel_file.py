@@ -7,7 +7,7 @@ Processes Excel data from raw folder with time series transformations.
 
 Example:
     df = (
-        DataProcessor("../data/raw.xlsx", "Данные")
+        excel_file("../data/raw_data.xlsx", "Данные")
         .process_time()
         .add_sin_seasonality(period=12)
         .add_cos_seasonality(period=12)
