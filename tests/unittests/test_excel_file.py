@@ -6,7 +6,7 @@ import os
 import random
 from src.excel_file import excel_file
 
-class TestExcelFile(unittest.TestCase):
+class test_excel_file(unittest.TestCase):
 
     def test_object_cannot_fail_to_convert_time_column_to_datetime(self):
         temp_dir = tempfile.TemporaryDirectory()
