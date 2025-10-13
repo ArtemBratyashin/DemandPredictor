@@ -1,20 +1,10 @@
-import pandas as pd
-import numpy as np
 import xgboost as xgb
+from src.csv_file import csv_file
 
-df = pd.read_excel('data/data.xlsx', sheet_name='Данные')
-df['Время'] = pd.to_datetime(df['Время'])
-
-period = 12
-df = df.reset_index(drop=True)
-df['month_index'] = np.arange(len(df))
-df['sin_season'] = np.sin(2 * np.pi * df['month_index'] / period)
-df['cos_season'] = -np.cos(2 * np.pi * df['month_index'] / period)
-
-for col in df.columns[1:]:
-    df[f'{col}_lag1'] = df[col].shift(1)
-
-df = df.dropna().reset_index(drop=True)
+df = (
+    csv_file("data/prepared_data.csv")
+    .load_df()
+)
 
 feature_cols = [col for col in df.columns if '_lag1' in col]
 

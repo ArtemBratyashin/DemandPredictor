@@ -19,4 +19,4 @@ def prepare_data(excel_path, sheet_name, csv_path):
     )
 
 if __name__ == "__main__":
-    prepare_data(excel_path = "../data/raw_data.xlsx", sheet_name = "Данные", csv_path = "../data/prepared_data.csv")
+    prepare_data(excel_path = "../data/raw_data.xlsx", sheet_name = "Data", csv_path = "../data/prepared_data.csv")

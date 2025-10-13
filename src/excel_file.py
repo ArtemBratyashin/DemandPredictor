@@ -7,7 +7,7 @@ Processes Excel data from raw folder with time series transformations.
 
 Example:
     df = (
-        excel_file("../data/raw_data.xlsx", "Данные")
+        excel_file("../data/raw_data.xlsx", "Data")
         .process_time()
         .add_sin_seasonality(period=12)
         .add_cos_seasonality(period=12)
@@ -27,7 +27,7 @@ class excel_file:
     Converts time column to datetime format.
     """
     def process_time(self):
-        self.__data['Время'] = pd.to_datetime(self.__data['Время'])
+        self.__data['Month'] = pd.to_datetime(self.__data['Month'])
         return self
 
     """
