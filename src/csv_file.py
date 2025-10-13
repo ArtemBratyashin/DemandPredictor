@@ -29,5 +29,6 @@ class csv_file:
     Loads and returns dataframe from CSV file.
     """
     def load_df(self):
-        df = pd.read_csv(self.__path, encoding='utf-8')
+        df = pd.read_csv(self.__path)
+        df['Month'] = pd.to_datetime(df['Month'])
         return df

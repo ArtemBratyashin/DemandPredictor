@@ -9,7 +9,7 @@ df = (
 feature_cols = [col for col in df.columns if '_lag1' in col]
 
 X = df[feature_cols]
-Y = df['Целевые сделки']
+Y = df['Deals']
 
 X_train = X.iloc[:-1]
 Y_train = Y.iloc[:-1]
@@ -22,6 +22,6 @@ forecast = model.predict(X_pred)[0]
 actual = Y.iloc[-1]
 mape = abs(forecast - actual) / actual * 100
 
-print(f'Прогноз на {df["Время"].iloc[-1].strftime("%Y-%m")}: {forecast:.0f}')
-print(f'Фактическое значение: {actual}')
+print(f'Forecat on {df["Month"].iloc[-1].strftime("%Y-%m")}: {forecast:.0f}')
+print(f'Real amount of deals: {actual}')
 print(f'MAPE: {mape:.2f}%')
