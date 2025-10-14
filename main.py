@@ -1,9 +1,9 @@
 import xgboost as xgb
 from src.csv_file import csv_file
 
-'''
+"""
 This is mvp file. I edit it and later it will be removed.
-'''
+"""
 
 df = (
     csv_file("data/prepared_data.csv")
