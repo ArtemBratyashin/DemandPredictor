@@ -33,19 +33,17 @@ class xgb_predictor:
     """
     Splits the dataframe into train and test sets based on the ratio of months.
     """
+
     def _split_train_test(self, train_ratio):
         months = self.df['month'].sort_values().unique()
-        split = int(len(months) * train_ratio)
-        train_months = months[:split]
-        test_months = months[split:]
+        split = int(len(months)*train_ratio)
 
-        train = self.df[self.df['month'].isin(train_months)]
-        test = self.df[self.df['month'].isin(test_months)]
+        train = self.df[self.df['month'].isin(months[:split])]
+        test = self.df[self.df['month'].isin(months[split:])]
 
-        X_train = train.drop([self.target_column], axis=1)
-        y_train = train[self.target_column]
-        X_test = test.drop([self.target_column], axis=1)
-        y_test = test[self.target_column]
+        X_train, y_train = train.drop(self.target_column, axis=1), train[self.target_column]
+        X_test, y_test = test.drop(self.target_column, axis=1), test[self.target_column]
+
         return X_train, y_train, X_test, y_test
 
     """
