@@ -8,7 +8,9 @@ import numpy as np
 XGBoost model class for deal volume prediction.
 
 Example:
-    
+    xgb_predictor(df, "Deals")
+    .train(train_ratio = 12/13)
+    .save_model(path = "../saved_models")
 """
 
 class xgb_predictor:
@@ -31,20 +33,42 @@ class xgb_predictor:
         return self
 
     """
+    Predicts the number of deals for the next month (using the last row of features).
+    """
+    def predict_next_month(self):
+        last_row = self.df.drop([self.target_column], axis=1).iloc[[-1]]
+        return float(self.model.predict(last_row)[0])
+
+    """
+    Saves the trained model to the specified or default directory.
+    """
+    def save_model(self, path):
+        file_path = os.path.join(path, "xgb_model.joblib")
+        joblib.dump(self.model, file_path)
+        return self
+
+    """
     Splits the dataframe into train and test sets based on the ratio of months.
     """
-
     def _split_train_test(self, train_ratio):
-        months = self.df['month'].sort_values().unique()
+        months = self.df['Month'].sort_values().unique()
         split = int(len(months)*train_ratio)
 
-        train = self.df[self.df['month'].isin(months[:split])]
-        test = self.df[self.df['month'].isin(months[split:])]
+        train = self.df[self.df['Month'].isin(months[:split])]
+        test = self.df[self.df['Month'].isin(months[split:])]
 
-        X_train, y_train = train.drop(self.target_column, axis=1), train[self.target_column]
-        X_test, y_test = test.drop(self.target_column, axis=1), test[self.target_column]
+        lag1_cols = self._get_lag1_columns()
+
+        X_train, y_train = train[lag1_cols], train[self.target_column]
+        X_test, y_test = test[lag1_cols], test[self.target_column]
 
         return X_train, y_train, X_test, y_test
+
+    """
+    Returns list of columns with lag_1 in their name.
+    """
+    def _get_lag1_columns(self):
+        return [col for col in self.df.columns if 'lag_1' in col]
 
     """
     Fits the XGBoost model on the training data.
@@ -64,18 +88,3 @@ class xgb_predictor:
     """
     def _calculate_mape(self, y_true, y_pred):
         return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-
-    """
-    Predicts the number of deals for the next month (using the last row of features).
-    """
-    def predict_next_month(self):
-        last_row = self.df.drop([self.target_column], axis=1).iloc[[-1]]
-        return float(self.model.predict(last_row)[0])
-
-    """
-    Saves the trained model to the specified or default directory.
-    """
-    def save_model(self, path):
-        file_path = os.path.join(path, "xgb_model.joblib")
-        joblib.dump(self.model, file_path)
-        return self
