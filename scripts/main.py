@@ -22,6 +22,6 @@ if __name__ == "__main__":
             train_ratio = 11/12
         )
         .save_model(
-            path = "../saved_models/xgb_model.joblib"
+            path = "../saved_models/test_model.joblib"
         )
     )
