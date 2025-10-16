@@ -18,6 +18,7 @@ class xgb_predictor:
     def __init__(self, df, target_column):
         self.df = df.copy()
         self.target_column = target_column
+        self.model = None
 
     """
     Trains and tests the model using time-series logic.
@@ -36,13 +37,15 @@ class xgb_predictor:
     Predicts the number of deals for the next month (using the last row of features).
     """
     def predict_next_month(self):
-        last_row = self.df.drop([self.target_column], axis=1).iloc[[-1]]
+        lag1_cols = self._get_lag1_columns()
+        last_row = self.df[lag1_cols].iloc[[-1]]
         return float(self.model.predict(last_row)[0])
 
     """
     Saves the trained model to the specified or default directory.
     """
     def save_model(self, path):
+        os.makedirs(path, exist_ok=True)
         file_path = os.path.join(path, "xgb_model.joblib")
         joblib.dump(self.model, file_path)
         return self
