@@ -21,16 +21,24 @@ class xgb_predictor:
         self.model = None
 
     """
-    Trains and tests the model using time-series logic.
-    The initial part (train_ratio fraction) of months is used for training,
-    The rest for testing. Prints test MAPE.
+    Trains the model using time-series logic.
+    The initial part (train_ratio fraction) of months is used for training.
     """
     def train(self, train_ratio):
         X_train, y_train, X_test, y_test = self._split_train_test(train_ratio)
         self._fit_model(X_train, y_train)
+        return self
+
+    """
+    Trains and tests the model using time-series logic.
+    The initial part (train_ratio fraction) of months is used for training,
+    The rest for testing. Prints test MAPE.
+    """
+    def train_and_test(self, train_ratio):
+        X_train, y_train, X_test, y_test = self._split_train_test(train_ratio)
+        self._fit_model(X_train, y_train)
         y_pred = self._predict(X_test)
-        mape = self._calculate_mape(y_test, y_pred)
-        print(f"Test MAPE: {mape:.2f}%")
+        self._disp_mape(y_test, y_pred)
         return self
 
     """
@@ -45,9 +53,7 @@ class xgb_predictor:
     Saves the trained model to the specified or default directory.
     """
     def save_model(self, path):
-        os.makedirs(path, exist_ok=True)
-        file_path = os.path.join(path, "xgb_model.joblib")
-        joblib.dump(self.model, file_path)
+        joblib.dump(self.model, path)
         return self
 
     """
@@ -71,7 +77,7 @@ class xgb_predictor:
     Returns list of columns with lag_1 in their name.
     """
     def _get_lag1_columns(self):
-        return [col for col in self.df.columns if 'lag_1' in col]
+        return [col for col in self.df.columns if 'lag1' in col]
 
     """
     Fits the XGBoost model on the training data.
@@ -89,5 +95,8 @@ class xgb_predictor:
     """
     Calculates Mean Absolute Percentage Error.
     """
-    def _calculate_mape(self, y_true, y_pred):
-        return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+    def _disp_mape(self, y_true, y_pred):
+        mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+        print(f"Real amount of deals: {' '.join(str(x) for x in y_true)}")
+        print(f"Predicted amount: {' '.join(str(x) for x in y_pred)}")
+        print(f"Test MAPE: {mape:.2f}%")

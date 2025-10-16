@@ -10,7 +10,6 @@ This is mvp file. I edit it and later it will be removed.
 """
 
 if __name__ == "__main__":
-
     (
         xgb_predictor(
             df=(
@@ -19,10 +18,10 @@ if __name__ == "__main__":
             ),
             target_column="Deals"
         )
-        .train(
-            train_ratio = 12/13
+        .train_and_test(
+            train_ratio = 11/12
         )
         .save_model(
-            path = "../saved_models"
+            path = "../saved_models/xgb_model.joblib"
         )
     )
