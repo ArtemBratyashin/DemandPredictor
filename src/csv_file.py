@@ -22,7 +22,7 @@ class csv_file:
     """
     def save(self, prepared_data):
         data = prepared_data
-        data.to_csv(self.__path, index=False, encoding='utf-8')
+        data.to_csv(self.__path, index=False)
         return self
 
     """

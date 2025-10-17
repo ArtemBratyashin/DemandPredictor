@@ -28,7 +28,7 @@ if __name__ == "__main__":
             target_column="Deals"
         )
         .train_and_test(
-            train_ratio = 12/13
+            train_ratio = 11/13
         )
         .save_model(
             path = "../saved_models/test_model.joblib"
