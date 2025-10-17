@@ -18,9 +18,9 @@ Example:
 
 class excel_file:
 
-    def __init__(self, path, sheet):
-        self.__path = Path(path)
-        self.__sheet = sheet
+    def __init__(self, excel_path, sheet_name):
+        self.__path = Path(excel_path)
+        self.__sheet = sheet_name
         self.__data = pd.read_excel(self.__path, sheet_name=self.__sheet)
 
     """

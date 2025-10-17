@@ -14,8 +14,8 @@ Example:
 
 class csv_file:
 
-    def __init__(self, path):
-        self.__path = Path(path)
+    def __init__(self, csv_path):
+        self.__path = Path(csv_path)
 
     """
     Saves data from excel_file to CSV file.
