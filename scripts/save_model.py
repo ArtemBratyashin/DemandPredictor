@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from src.xgb_predictor import xgb_predictor
+from src.xgbpredictor import XGBPredictor
 from src.csv_file import csv_file
 
 """
@@ -11,7 +11,7 @@ Saves model to folder
 
 def save_model(data_path, target_column, model_path):
     (
-        xgb_predictor(
+        XGBPredictor(
             df=(
                 csv_file(data_path)
                 .load_df()

@@ -16,7 +16,7 @@ Example:
     )
 """
 
-class excel_file:
+class RawData:
 
     def __init__(self, excel_path, sheet_name):
         self.__path = Path(excel_path)

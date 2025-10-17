@@ -4,7 +4,7 @@ import numpy as np
 import tempfile
 import os
 import random
-from src.excel_file import excel_file
+from src.rawdata import RawData
 
 class test_excel_file(unittest.TestCase):
 
@@ -16,7 +16,7 @@ class test_excel_file(unittest.TestCase):
             'Сделки': [random.randint(0,200) for _ in range(4)]
         })
         df.to_excel(excel_path, sheet_name="Данные", index=False)
-        ef = excel_file(excel_path, "Данные")
+        ef = RawData(excel_path, "Данные")
         ef.process_time()
         temp_dir.cleanup()
         self.assertTrue(
@@ -32,7 +32,7 @@ class test_excel_file(unittest.TestCase):
             'Сделки': [random.randint(-100, 200) for _ in range(4)]
         })
         df.to_excel(excel_path, sheet_name="Данные", index=False)
-        ef = excel_file(excel_path, "Данные")
+        ef = RawData(excel_path, "Данные")
         ef.add_sin_seasonality(period=12)
         temp_dir.cleanup()
         self.assertTrue(
@@ -49,7 +49,7 @@ class test_excel_file(unittest.TestCase):
             'Сделки': [random.randint(-150, 200) for _ in range(4)]
         })
         df.to_excel(excel_path, sheet_name="Данные", index=False)
-        ef = excel_file(excel_path, "Данные")
+        ef = RawData(excel_path, "Данные")
         ef.add_cos_seasonality(period=12)
         temp_dir.cleanup()
         self.assertTrue(
@@ -67,7 +67,7 @@ class test_excel_file(unittest.TestCase):
             '☆Другое': [random.randint(1, 999) for _ in range(4)]
         })
         df.to_excel(excel_path, sheet_name="Данные", index=False)
-        ef = excel_file(excel_path, "Данные")
+        ef = RawData(excel_path, "Данные")
         ef.add_lags()
         temp_dir.cleanup()
         self.assertTrue(
@@ -83,7 +83,7 @@ class test_excel_file(unittest.TestCase):
             'Сделки': [random.randint(1, 500) for _ in range(4)]
         })
         df.to_excel(excel_path, sheet_name="Данные", index=False)
-        ef = excel_file(excel_path, "Данные")
+        ef = RawData(excel_path, "Данные")
         ef.add_lags()
         df_clean = ef.prepared_data()
         temp_dir.cleanup()

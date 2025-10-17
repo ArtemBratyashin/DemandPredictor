@@ -1,4 +1,3 @@
-import os
 import joblib
 from xgboost import XGBRegressor
 import pandas as pd
@@ -13,7 +12,7 @@ Example:
     .save_model(path = "../saved_models")
 """
 
-class xgb_predictor:
+class XGBPredictor:
 
     def __init__(self, df, target_column):
         self.df = df.copy()
