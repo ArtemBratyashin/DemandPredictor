@@ -26,10 +26,8 @@ class RawData:
     """
     def make_features(self) -> pd.DataFrame:
         df = self.__load_csv()
-        features = pd.DataFrame()
-        features['Month'] = df['Month']
-        for col in df.select_dtypes(include=[np.number]).columns:
-            features[f'{col} lag1'] = df[col].shift(1)
+        df = self.__add_next_month(df)
+        features = self.__create_feature(df)
         return features
 
     """
@@ -37,7 +35,7 @@ class RawData:
     """
     def target(self, target_param:str) -> pd.DataFrame:
         df = self.__load_csv()
-        df = df['Month', target_param]
+        df = df[['Month', target_param]]
         return df
 
     """
@@ -47,3 +45,23 @@ class RawData:
         df = pd.read_csv(self.__path)
         df['Month'] = pd.to_datetime(df['Month'])
         return df
+
+    """
+    Private function to add next month row with NaN values for numerical columns.
+    """
+    def __add_next_month(self, df) -> pd.DataFrame:
+        next_month = df['Month'].max() + pd.DateOffset(months=1)
+        next_row = {col: np.nan for col in df.columns}
+        next_row['Month'] = next_month
+        return pd.concat([df, pd.DataFrame([next_row])], ignore_index=True)
+
+    """
+    Private function for feature dataframe template. 
+    """
+    def __create_feature(self, df) -> pd.DataFrame:
+        features = pd.DataFrame()
+        features['Month'] = df['Month']
+        for col in df.select_dtypes(include=[np.number]).columns:
+            features[f'{col} lag1'] = df[col].shift(1)
+        features = features.iloc[1:].reset_index(drop=True)
+        return features
