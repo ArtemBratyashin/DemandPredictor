@@ -3,7 +3,7 @@ import pandas as pd
 import tempfile
 import os
 import random
-from src.csv_file import csv_file
+from src.features import csv_file
 
 class test_csv_file(unittest.TestCase):
 

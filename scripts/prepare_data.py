@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
 from src.rawdata import RawData
-from src.csv_file import csv_file
+from src.features import csv_file
 
 """
 Prepares raw data to prepare data for using it in models

@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
 from src.xgbpredictor import XGBPredictor
-from src.csv_file import csv_file
+from src.features import csv_file
 
 """
 Saves model to folder

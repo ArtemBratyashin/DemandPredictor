@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
 from src.rawdata import RawData
-from src.csv_file import csv_file
+from src.features import csv_file
 from src.xgbpredictor import XGBPredictor
 
 """
@@ -16,7 +16,7 @@ if __name__ == "__main__":
             df=(
                 csv_file(csv_path="../data/prepared_data.csv")
                 .save(
-                    RawData(excel_path="../data/raw_data.xlsx", sheet_name="Data")
+                    RawData(file_path="../data/raw_data.xlsx", sheet_name="Data")
                     .process_time()
                     .add_sin_seasonality(period=12)
                     .add_cos_seasonality(period=12)

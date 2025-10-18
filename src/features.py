@@ -26,7 +26,6 @@ class Features:
     Adds sin seasonal feature based on monthly index.
     """
     def add_sin_seasonality(self, period: int) -> Self:
-        self.__features = self.__features.reset_index(drop=True)
         month_index = np.arange(len(self.__features))
         self.__features['sin_season'] = np.sin(2*np.pi*month_index/period)
         return self
@@ -35,7 +34,6 @@ class Features:
     Adds cos seasonal feature based on monthly index.
     """
     def add_cos_seasonality(self, period: int) -> Self:
-        self.__features = self.__features.reset_index(drop=True)
         month_index = np.arange(len(self.__features))
         self.__features['cos_season'] = np.cos(2*np.pi*month_index/period)
         return self
