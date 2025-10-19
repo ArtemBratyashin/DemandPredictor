@@ -3,7 +3,7 @@ import numpy as np
 from pathlib import Path
 
 """
-Processes Excel data from raw folder with time series transformations.
+Processes raw data to features and target values for prediction model.
 
 Examples:
     df = (
