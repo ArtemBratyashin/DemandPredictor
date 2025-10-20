@@ -10,17 +10,13 @@ XGBoost model class for deal volume prediction that trains and saves model.
 Example:
     XGBTrainer(
         (
-            Features(
-                Rawdata(...)
-                .make_features(...)
-            )
-            .add_sin_seasonality(period=12)
-            .add_cos_seasonality(period=12)
+            Features(...)
+            ...
             .prepare_data()
         ), 
         (
-            RawData("../data/raw_data.csv")
-            .target('Deals')
+            RawData(...)
+            .target(...)
         )
     )
     .train()
@@ -30,18 +26,18 @@ Example:
 class XGBTrainer:
 
     def __init__(self, features: pd.DataFrame, target: pd.DataFrame):
-        self.features = features.copy()
-        self.target = target.copy()
-        self.model = XGBRegressor()
+        self.__features = features.copy()
+        self.__target = target.copy()
+        self.__model = XGBRegressor()
 
     """
     Trains the model using time-series logic.
     """
     def train(self) -> Self:
-        self.model.fit(
+        self.__fit_model(
             self.__process_to_equel_months(
-                self.features,
-                self.target
+                self.__features,
+                self.__target
             )
         )
         return self
@@ -52,11 +48,19 @@ class XGBTrainer:
     def save_model(self, folder_path:str, model_name: str) -> str:
         model_path = os.path.join(folder_path, "xgb_model.joblib")
         joblib.dump(
-            self.model,
+            self.__model,
             model_path
         )
         return model_path
 
+    #Needs tests
+    """
+    Fits the model.
+    """
+    def __fit_model(self, x, y):
+        self.__model.fit(x, y)
+
+    #This code needs to be fixed
     """
     Splits the dataframe into train and test sets based on the ratio of months.
     """
@@ -65,8 +69,9 @@ class XGBTrainer:
         target = target.copy()
         return (features, target)
 
+    #It will be used for prediction class
     """
     Predicts target values for the given feature set.
     """
     def _predict(self, X):
-        return self.model.predict(X)
+        return self.__model.predict(X)
