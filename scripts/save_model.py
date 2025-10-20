@@ -1,8 +1,9 @@
 import sys
+from xgboost import XGBRegressor
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from src.xgbtrainer import XGBTrainer
+from src.modeltrainer import ModelTrainer
 from src.features import Features
 from src.rawdata import RawData
 
@@ -12,7 +13,7 @@ Saves model to folder
 
 def save_model(data_path, target, models_folder_path, model_name):
     model_path=(
-        XGBTrainer()
+        ModelTrainer(XGBRegressor())
         .train(
             (
                 Features(

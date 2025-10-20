@@ -1,15 +1,14 @@
 import joblib
 import os
-from xgboost import XGBRegressor
 import pandas as pd
-from typing import Self
+from typing import Any, Self
 
 """
-XGBoost model class for deal volume prediction that trains and saves model.
+Model class for prediction target that trains and saves model.
 
 Example:
     (
-        XGBTrainer()
+        ModelTrainer(XGBRegressor())
         .train(
             (
                 Features(...)
@@ -25,10 +24,10 @@ Example:
     )
 """
 
-class XGBTrainer:
+class ModelTrainer:
 
-    def __init__(self):
-        self.__model = XGBRegressor()
+    def __init__(self, model: Any):
+        self.__model = model
 
     """
     Trains the model using time-series logic.

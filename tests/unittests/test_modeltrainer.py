@@ -4,20 +4,20 @@ import numpy as np
 import tempfile
 import os
 import sys
+from xgboost import XGBRegressor
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent))
-from src.xgbtrainer import XGBTrainer
+from src.modeltrainer import ModelTrainer
 
 """
-Unit tests for XGBTrainer class.
-
-Tests covering fit, process, save-model logic and month intersection.
+Unit tests for ModelTrainer class.
+Covers intersections, train/save logic and .fit call.
 """
 
-class TestXGBTrainer(unittest.TestCase):
+class TestModelTrainer(unittest.TestCase):
     """
-    Test that only common months are returned after processing.
+    Проверяет, что пересечение месяцев работает корректно.
     """
     def test_process_to_equel_months_retains_common_months(self):
         features = pd.DataFrame({
@@ -28,42 +28,32 @@ class TestXGBTrainer(unittest.TestCase):
             'Month': [1,2,3,4,5],
             'target': np.arange(5)
         })
-        # Only months 2,3,4,5 should remain
-        trainer = XGBTrainer()
-        processed_features, processed_target = trainer._XGBTrainer__process_to_equel_months(features, target)
-        self.assertListEqual(
-            list(processed_features['Month']),
-            [2,3,4,5],
-            "Features do not contain correct common months"
-        )
-        self.assertListEqual(
-            list(processed_target['Month']),
-            [2,3,4,5],
-            "Target does not contain correct common months"
-        )
+        trainer = ModelTrainer(XGBRegressor())
+        x, y = trainer._ModelTrainer__process_to_equel_months(features, target)
+        self.assertListEqual(x.index.tolist(), [0,1,2,3], "Features index isn't rebuilt correctly")
+        self.assertListEqual(list(y), [1,2,3,4], "Target values aren't built correctly")
 
     """
-    Test that train returns self for chaining and fits model.
+    Проверяет, что train возвращает self и обучает модель.
     """
     def test_train_returns_self_and_fits(self):
         features = pd.DataFrame({
             'Month': [2,3,4],
-            'f1': [1,2,3],
-            'f2': [3,2,1]
+            'f1': [10,11,12]
         })
         target = pd.DataFrame({
             'Month': [2,3,4],
-            'target': [7,5,3]
+            'target': [5,4,3]
         })
-        trainer = XGBTrainer()
+        trainer = ModelTrainer(XGBRegressor())
         returned = trainer.train(features, target)
-        self.assertIs(returned, trainer, "train does not return self")
+        self.assertIs(returned, trainer, "train doesn't return self")
 
     """
-    Test that save_model persists model with provided name.
+    Проверяет, что save_model сохраняет файл с верным именем.
     """
     def test_save_model_creates_file_with_right_name(self):
-        trainer = XGBTrainer()
+        trainer = ModelTrainer(XGBRegressor())
         folder = tempfile.mkdtemp()
         model_name = "unit_test_model"
         trainer.train(
@@ -77,14 +67,13 @@ class TestXGBTrainer(unittest.TestCase):
         os.rmdir(folder)
 
     """
-    Test that internal fit_model can fit on the given small dataset.
+    Проверяет, что приватный метод fit работает без ошибок.
     """
     def test_internal_fit_model_trains_without_error(self):
-        trainer = XGBTrainer()
+        trainer = ModelTrainer(XGBRegressor())
         x = pd.DataFrame({'f':[0,1,2]})
         y = pd.Series([0,1,2])
-        # Should not raise error
-        trainer._XGBTrainer__fit_model(x, y)
+        trainer._ModelTrainer__fit_model(x, y)
 
 if __name__ == "__main__":
     unittest.main()
