@@ -2,29 +2,44 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from src.xgbpredictor import XGBPredictor
-from src.features import csv_file
+from src.xgbtrainer import XGBTrainer
+from src.features import Features
+from src.rawdata import RawData
 
 """
 Saves model to folder
 """
 
-def save_model(data_path, target_column, model_path):
-    (
-        XGBPredictor(
-            df=(
-                csv_file(data_path)
-                .load_df()
+def save_model(data_path, target, models_folder_path, model_name):
+    model_path=(
+        XGBTrainer(
+            (
+                Features(
+                    RawData(data_path)
+                    .make_features()
+                )
+                .add_sin_seasonality(period=12)
+                .add_cos_seasonality(period=12)
+                .prepare_data()
             ),
-            target_column=target_column,
+            (
+                RawData("../data/raw_data.csv")
+                .target(target)
+            )
         )
-        .train(
-            train_ratio=12/12
-        )
-        .save_model(
-            path=model_path
-        )
+        .train()
+        .save_model(folder_path=models_folder_path, model_name=model_name)
     )
+    return model_path
 
 if __name__ == "__main__":
-    save_model(data_path="../data/prepared_data.csv", target_column="Deals", model_path="../saved_models/xgb_model.joblib")
+    print(
+        f"Model was saved to {
+            save_model(
+                data_path="../data/prepared_data.csv", 
+                target="Deals", 
+                models_folder_path="../saved_models", 
+                model_name="xgb_model"
+            )
+        }"
+    )
