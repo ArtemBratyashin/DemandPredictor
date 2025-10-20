@@ -12,7 +12,8 @@ Saves model to folder
 
 def save_model(data_path, target, models_folder_path, model_name):
     model_path=(
-        XGBTrainer(
+        XGBTrainer()
+        .train(
             (
                 Features(
                     RawData(data_path)
@@ -23,11 +24,10 @@ def save_model(data_path, target, models_folder_path, model_name):
                 .prepare_data()
             ),
             (
-                RawData("../data/raw_data.csv")
+                RawData(data_path)
                 .target(target)
             )
         )
-        .train()
         .save_model(folder_path=models_folder_path, model_name=model_name)
     )
     return model_path
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     print(
         f"Model was saved to {
             save_model(
-                data_path="../data/prepared_data.csv", 
+                data_path="../data/raw_data.csv", 
                 target="Deals", 
                 models_folder_path="../saved_models", 
                 model_name="xgb_model"

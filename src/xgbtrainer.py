@@ -59,8 +59,11 @@ class XGBTrainer:
     """
     Splits the dataframe into train and test sets based on the ratio of months.
     """
-    def __process_to_equel_months(self, features: pd.DataFrame, target: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+
+    def __process_to_equel_months(self, features: pd.DataFrame, target: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
         common_months = sorted(set(features['Month']) & set(target['Month']))
         features = features[features['Month'].isin(common_months)].reset_index(drop=True)
         target = target[target['Month'].isin(common_months)].reset_index(drop=True)
-        return features, target
+        x = features.drop(columns=['Month'])
+        y = target.iloc[:, 1]
+        return x, y
