@@ -8,70 +8,59 @@ from typing import Self
 XGBoost model class for deal volume prediction that trains and saves model.
 
 Example:
-    XGBTrainer(
-        (
-            Features(...)
-            ...
-            .prepare_data()
-        ), 
-        (
-            RawData(...)
-            .target(...)
+    (
+        XGBTrainer()
+        .train(
+            (
+                Features(...)
+                ...
+                .prepare_data()
+            ), 
+            (
+                RawData(...)
+                .target(...)
+            )
         )
+        .save_model(folder_path = "../saved_models", model_name = "xgb_model"))
     )
-    .train()
-    .save_model(folder_path = "../saved_models", model_name = "xgb_model"))
 """
 
 class XGBTrainer:
 
-    def __init__(self, features: pd.DataFrame, target: pd.DataFrame):
-        self.__features = features.copy()
-        self.__target = target.copy()
+    def __init__(self):
         self.__model = XGBRegressor()
 
     """
     Trains the model using time-series logic.
     """
-    def train(self) -> Self:
-        self.__fit_model(
-            self.__process_to_equel_months(
-                self.__features,
-                self.__target
-            )
-        )
+    def train(self, features: pd.DataFrame, target: pd.DataFrame) -> Self:
+        x, y = self.__process_to_equel_months(features, target)
+        self.__fit_model(x, y)
         return self
 
     """
     Saves the trained model to the directory for using it in prediction class.
     """
     def save_model(self, folder_path:str, model_name: str) -> str:
-        model_path = os.path.join(folder_path, "xgb_model.joblib")
+        model_name += '.joblib'
+        model_path = os.path.join(folder_path, model_name)
         joblib.dump(
             self.__model,
             model_path
         )
         return model_path
 
-    #Needs tests
     """
     Fits the model.
     """
     def __fit_model(self, x, y):
         self.__model.fit(x, y)
 
-    #This code needs to be fixed
     """
     Splits the dataframe into train and test sets based on the ratio of months.
     """
     def __process_to_equel_months(self, features: pd.DataFrame, target: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-        features = features.copy()
-        target = target.copy()
-        return (features, target)
-
-    #It will be used for prediction class
-    """
-    Predicts target values for the given feature set.
-    """
-    def _predict(self, X):
-        return self.__model.predict(X)
+        common_months = sorted(set(features['Month']) & set(target['Month']))
+        features = features[features['Month'].isin(common_months)].reset_index(drop=True)
+        target = target[target['Month'].isin(common_months)].reset_index(drop=True)
+        return features, target
