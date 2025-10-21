@@ -10,9 +10,7 @@ Example:
         models_folder = "../saved_models/xgb_model",
         model_name = "xgb_model"
     )
-    .predict(
-        
-    )
+    .predict()
 """
 
 class Predictor:
@@ -21,7 +19,7 @@ class Predictor:
         self.__models_folder = models_folder
         self.__model_name = model_name
 
-    def predict_last(self) -> float:
+    def predict(self) -> float:
         model_path = os.path.join(self.__models_folder, self.__model_name, self.__model_name + ".joblib")
         features_path = os.path.join(self.__models_folder, self.__model_name, "features.csv")
         model = joblib.load(model_path)
