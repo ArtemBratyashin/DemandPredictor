@@ -17,12 +17,29 @@ class Predictor:
     def __init__(self, model_folder: str):
         self.__model_folder = model_folder
 
+    """
+    Predicts the target for the next month.
+    """
     def predict(self) -> float:
-        model_name = os.path.basename(os.path.normpath(self.__model_folder))
-        model_path = os.path.join(self.__model_folder, model_name + ".joblib")
-        features_path = os.path.join(self.__model_folder, "features.csv")
-        model = joblib.load(model_path)
+        model = self.__load_model(self.__model_folder)
+        features = self.__last_month_features(self.__model_folder)
+        prediction = model.predict(features)
+        return prediction[0]
+
+    """
+    Gives last month features for prediction.
+    """
+    def __last_month_features(self, model_folder: str) -> pd.DataFrame:
+        features_path = os.path.join(model_folder, "features.csv")
         features = pd.read_csv(features_path)
-        x_last = features.drop(columns=['Month'], errors='ignore').iloc[[-1]]
-        prediction = model.predict(x_last)
-        return float(prediction[0])
+        last_features = features.drop(columns=['Month'], errors='ignore').iloc[[-1]]
+        return last_features
+
+    """
+    Loads model from folder.
+    """
+    def __load_model(self, model_folder: str) -> joblib.load:
+        model_name = os.path.basename(os.path.normpath(model_folder))
+        model_path = os.path.join(model_folder, model_name + ".joblib")
+        model = joblib.load(model_path)
+        return model
