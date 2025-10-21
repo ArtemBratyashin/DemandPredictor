@@ -21,7 +21,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_make_features_first_lag_value_matches_first_original(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_①.csv')
+        path = os.path.join(directory, 'test_data_1.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [17, 23, 31],
@@ -39,7 +39,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_make_features_last_lag_value_matches_last_original(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_②.csv')
+        path = os.path.join(directory, 'test_data_2.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [19, 29, 41],
@@ -57,7 +57,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_make_features_contains_expected_columns(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_③.csv')
+        path = os.path.join(directory, 'test_data_3.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [13, 27, 43],
@@ -76,7 +76,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_make_features_row_count_is_correct(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_④.csv')
+        path = os.path.join(directory, 'test_data_4.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [11, 25, 37],
@@ -94,7 +94,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_target_returns_dataframe_with_month_and_target_columns(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑤.csv')
+        path = os.path.join(directory, 'test_data_5.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [47, 53, 59],
@@ -112,7 +112,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_target_returns_correct_number_of_rows(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑥.csv')
+        path = os.path.join(directory, 'test_data_6.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [61, 67, 71],
@@ -130,7 +130,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_target_month_column_is_datetime(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑦.csv')
+        path = os.path.join(directory, 'test_data_7.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [73, 79, 83],
@@ -148,7 +148,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_load_csv_returns_correct_shape(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑧.csv')
+        path = os.path.join(directory, 'test_data_8.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [89, 97, 101],
@@ -156,7 +156,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        result = raw._RawData__load_csv()
+        result = raw._RawData__load_csv(raw._RawData__path)
         os.remove(path)
         os.rmdir(directory)
         self.assertEqual(result.shape, (3, 3), msg="Loaded DataFrame shape is incorrect")
@@ -166,7 +166,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_load_csv_month_column_is_datetime(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑨.csv')
+        path = os.path.join(directory, 'test_data_9.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [103, 107, 109],
@@ -174,7 +174,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        result = raw._RawData__load_csv()
+        result = raw._RawData__load_csv(raw._RawData__path)
         os.remove(path)
         os.rmdir(directory)
         self.assertTrue(pd.api.types.is_datetime64_any_dtype(result['Month']), msg="Month from load_csv is not datetime")
@@ -184,7 +184,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_add_next_month_increases_row_count(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑩.csv')
+        path = os.path.join(directory, 'test_data_10.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [113, 127, 131],
@@ -192,7 +192,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        loaded = raw._RawData__load_csv()
+        loaded = raw._RawData__load_csv(raw._RawData__path)
         result = raw._RawData__add_next_month(loaded)
         os.remove(path)
         os.rmdir(directory)
@@ -203,7 +203,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_add_next_month_last_row_deals_is_nan(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑪.csv')
+        path = os.path.join(directory, 'test_data_11.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [137, 139, 149],
@@ -211,7 +211,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        loaded = raw._RawData__load_csv()
+        loaded = raw._RawData__load_csv(raw._RawData__path)
         result = raw._RawData__add_next_month(loaded)
         os.remove(path)
         os.rmdir(directory)
@@ -222,7 +222,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_add_next_month_last_row_month_is_next_month(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑫.csv')
+        path = os.path.join(directory, 'test_data_12.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [151, 157, 163],
@@ -230,7 +230,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        loaded = raw._RawData__load_csv()
+        loaded = raw._RawData__load_csv(raw._RawData__path)
         result = raw._RawData__add_next_month(loaded)
         os.remove(path)
         os.rmdir(directory)
@@ -241,7 +241,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_create_feature_contains_lag_columns(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑬.csv')
+        path = os.path.join(directory, 'test_data_13.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [167, 173, 179],
@@ -249,7 +249,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        loaded = raw._RawData__load_csv()
+        loaded = raw._RawData__load_csv(raw._RawData__path)
         next_month = raw._RawData__add_next_month(loaded)
         result = raw._RawData__create_feature(next_month)
         os.remove(path)
@@ -261,7 +261,7 @@ class TestRawData(unittest.TestCase):
     """
     def test_private_create_feature_row_count_is_correct(self):
         directory = tempfile.mkdtemp()
-        path = os.path.join(directory, 'тест_данные_⑭.csv')
+        path = os.path.join(directory, 'test_data_14.csv')
         frame = pd.DataFrame({
             'Month': ['2020-01-01', '2020-02-01', '2020-03-01'],
             'Deals': [181, 191, 193],
@@ -269,7 +269,7 @@ class TestRawData(unittest.TestCase):
         })
         frame.to_csv(path, index=False)
         raw = RawData(path)
-        loaded = raw._RawData__load_csv()
+        loaded = raw._RawData__load_csv(raw._RawData__path)
         next_month = raw._RawData__add_next_month(loaded)
         result = raw._RawData__create_feature(next_month)
         os.remove(path)
