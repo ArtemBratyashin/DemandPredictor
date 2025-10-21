@@ -43,10 +43,7 @@ class ModelTrainer:
     def save_model(self, folder_path:str, model_name: str) -> str:
         model_name += '.joblib'
         model_path = os.path.join(folder_path, model_name)
-        joblib.dump(
-            self.__model,
-            model_path
-        )
+        joblib.dump(self.__model, model_path)
         return model_path
 
     """
