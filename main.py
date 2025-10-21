@@ -9,7 +9,8 @@ from scripts.predict_target import predict_target
 from scripts.save_model import save_model
 
 """
-This is mvp file. I edit it and later it will be removed.
+This is main file. Here you can see the examples of using projects code.
+Just choose short or long version by using '#'
 """
 
 def long_example(model:Any, data_path:str, target:str, models_folder_path:str, model_name:str) -> str:
