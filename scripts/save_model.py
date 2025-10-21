@@ -13,8 +13,8 @@ Saves model to folder
 
 def save_model(data_path, target, models_folder_path, model_name):
     model_path=(
-        ModelTrainer(XGBRegressor())
-        .train(
+        ModelTrainer(
+            XGBRegressor(),
             (
                 Features(
                     RawData(data_path)
@@ -23,11 +23,11 @@ def save_model(data_path, target, models_folder_path, model_name):
                 .add_sin_seasonality(period=12)
                 .add_cos_seasonality(period=12)
                 .prepare_data()
-            ),
-            (
-                RawData(data_path)
-                .target(target)
             )
+        )
+        .train(
+            RawData(data_path)
+            .target(target)
         )
         .save_model(folder_path=models_folder_path, model_name=model_name)
     )
