@@ -1,34 +1,31 @@
 import joblib
+import os
 import pandas as pd
 
 """
 Loads a trained model and predicts for the latest row of the provided DataFrame.
 
 Example:
-    Predictor("../saved_models/xgb_model.joblib")
+    Predictor(
+        models_folder = "../saved_models/xgb_model",
+        model_name = "xgb_model"
+    )
     .predict(
-        Features(
-            RawData(data_path)
-            .make_features()
-        )
-        .add_sin_seasonality(period=12)
-        .add_cos_seasonality(period=12)
-        .prepare_data()
+        
     )
 """
 
 class Predictor:
 
-    def __init__(self, model_path: str):
-        self.__model_path = model_path
+    def __init__(self, models_folder: str, model_name: str):
+        self.__models_folder = models_folder
+        self.__model_name = model_name
 
-    """
-    Predict using the model for the last row in the DataFrame.
-    Returns prediction as float.
-    """
-    def predict(self, features: pd.DataFrame) -> float:
-        model = joblib.load(self.__model_path)
+    def predict_last(self) -> float:
+        model_path = os.path.join(self.__models_folder, self.__model_name, self.__model_name + ".joblib")
+        features_path = os.path.join(self.__models_folder, self.__model_name, "features.csv")
+        model = joblib.load(model_path)
+        features = pd.read_csv(features_path)
         x_last = features.drop(columns=['Month'], errors='ignore').iloc[[-1]]
-        print(x_last)
         prediction = model.predict(x_last)
         return float(prediction[0])
