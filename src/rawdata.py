@@ -25,7 +25,7 @@ class RawData:
     Creates 1-month lag features for all numerical columns to use it for Features class.
     """
     def make_features(self) -> pd.DataFrame:
-        df = self.__load_csv()
+        df = self.__load_csv(self.__path)
         df = self.__add_next_month(df)
         features = self.__create_feature(df)
         return features
@@ -34,15 +34,15 @@ class RawData:
     Creates target column to use it for training models.
     """
     def target(self, target_param:str) -> pd.DataFrame:
-        df = self.__load_csv()
+        df = self.__load_csv(self.__path)
         df = df[['Month', target_param]]
         return df
 
     """
     Private function for loading data. 
     """
-    def __load_csv(self) -> pd.DataFrame:
-        df = pd.read_csv(self.__path)
+    def __load_csv(self, path:str) -> pd.DataFrame:
+        df = pd.read_csv(path)
         df['Month'] = pd.to_datetime(df['Month'])
         return df
 

@@ -4,7 +4,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from src.predictor import Predictor
 
-def predict_target(model_folder:str):
+def predict_target(model_folder:str) -> int|float:
     result = (
         Predictor(
             model_folder = model_folder
