@@ -4,11 +4,10 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from src.predictor import Predictor
 
-def predict_target(models_folder:str, model_name:str):
+def predict_target(model_folder:str):
     result = (
         Predictor(
-            models_folder = models_folder,
-            model_name = model_name
+            model_folder = model_folder
         )
         .predict()
     )
@@ -17,9 +16,10 @@ def predict_target(models_folder:str, model_name:str):
 if __name__ == "__main__":
     print(
         f"Predicted number is: {
-            predict_target(
-                models_folder="../saved_models", 
-                model_name="xgb_model"
+            int(
+                predict_target(
+                    model_folder="../saved_models/xgb_model"
+                )
             )
         }"
     )

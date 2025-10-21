@@ -50,7 +50,8 @@ class ModelTrainer:
         joblib.dump(self.__model, model_file)
         features_file = os.path.join(model_folder, 'features.csv')
         self.__features.to_csv(features_file, index=False)
-        return model_folder
+        abs_path = os.path.abspath(model_folder)
+        return abs_path
 
     """
     Fits the model.
