@@ -39,10 +39,10 @@ class Features:
         return self
 
     """
-    Removes specified columns from the features dataframe.
+    Leaves specified columns from the features dataframe.
     """
-    def drop_columns(self, columns: List[str]) -> Self:
-        self.__features = self.__features.drop(columns=columns, errors='ignore')
+    def choose_columns(self, columns: List[str]) -> Self:
+        self.__features = self.__features[['Month'] + [col for col in columns if col in self.__features.columns]]
         return self
 
     """
