@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from typing import Self
+from typing import Self, List
 
 """
 Works with features and adds seasonality.
@@ -36,6 +36,13 @@ class Features:
     def add_cos_seasonality(self, period: int) -> Self:
         month_index = np.arange(len(self.__features))
         self.__features['cos_season'] = np.cos(2*np.pi*month_index/period)
+        return self
+
+    """
+    Removes specified columns from the features dataframe.
+    """
+    def drop_columns(self, columns: List[str]) -> Self:
+        self.__features = self.__features.drop(columns=columns, errors='ignore')
         return self
 
     """
