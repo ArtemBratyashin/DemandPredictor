@@ -34,7 +34,7 @@ class ModelValidator:
     Validates the model using walk-forward time-series approach and returns predictions, proportions and MAPE.
     """
     def validate(self, target: pd.DataFrame) -> pd.DataFrame:
-        x, y, _ = self.__process_to_equel_months(self.__features, target)
+        x, y = self.__process_to_equel_months(self.__features, target)
         splits = self.__get_splits(len(x))
         results = [self.__train_and_predict(x, y, split, len(x)) for split in splits]
         return pd.DataFrame(results, columns=['TrainPart', 'Actual', 'Predicted', 'MAPE'])
@@ -71,7 +71,6 @@ class ModelValidator:
         common_months = sorted(set(features['Month']) & set(target['Month']))
         features = features[features['Month'].isin(common_months)].reset_index(drop=True)
         target = target[target['Month'].isin(common_months)].reset_index(drop=True)
-        months = features['Month'].tolist()
         x = features.drop(columns=['Month'])
         y = target.iloc[:, 1]
-        return x, y, months
+        return x, y
