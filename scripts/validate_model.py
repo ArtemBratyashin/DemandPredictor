@@ -9,7 +9,7 @@ from src.model_validator import ModelValidator
 from src.features import Features
 from src.rawdata import RawData
 
-def test_model(model:Any, data_path:str, target:str) -> pd.DataFrame:
+def validate_model(model:Any, data_path:str, target:str) -> pd.DataFrame:
     result = (
         ModelValidator(
             model,
@@ -35,7 +35,7 @@ def test_model(model:Any, data_path:str, target:str) -> pd.DataFrame:
 if __name__ == "__main__":
     print(
         f" Result of the test:\n{
-        test_model(
+        validate_model(
             model=XGBRegressor(),
             data_path="../data/raw_data.csv",
             target="Deals"
