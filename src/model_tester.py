@@ -23,7 +23,7 @@ Example:
     )
 """
 
-class ModelValidation:
+class ModelTester:
 
     def __init__(self, model: Any, features: pd.DataFrame):
         self.__model = model

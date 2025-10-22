@@ -5,7 +5,6 @@ from src.rawdata import RawData
 from src.features import Features
 from src.model_trainer import ModelTrainer
 from src.predictor import Predictor
-from src.model_tester import ModelValidation
 from scripts.predict_target import predict_target
 from scripts.save_model import save_model
 

@@ -21,5 +21,5 @@ if __name__ == "__main__":
                     model_folder="../saved_models/xgb_model"
                 )
             )
-        }"
+        }."
     )
