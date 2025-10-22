@@ -60,9 +60,8 @@ class ModelTrainer:
         self.__model.fit(x, y)
 
     """
-    Splits the dataframe into train and test sets based on the ratio of months.
+    Prepares feature and target for prediction.
     """
-
     def __process_to_equel_months(self, features: pd.DataFrame, target: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
         common_months = sorted(set(features['Month']) & set(target['Month']))
         features = features[features['Month'].isin(common_months)].reset_index(drop=True)

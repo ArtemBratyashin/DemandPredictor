@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import Any
+from typing import Any, List, Tuple
 
 """
 Model validation class that tests model performance using time-series walk-forward validation.
@@ -34,57 +34,44 @@ class ModelValidator:
     Validates the model using walk-forward time-series approach and returns predictions, proportions and MAPE.
     """
     def validate(self, target: pd.DataFrame) -> pd.DataFrame:
-        x, y = self.__process_to_equel_months(self.__features, target)
-        result = self.__walk_forward(x, y)
-        return result
+        x, y, _ = self.__process_to_equel_months(self.__features, target)
+        splits = self.__get_splits(len(x))
+        results = [self.__train_and_predict(x, y, split, len(x)) for split in splits]
+        return pd.DataFrame(results, columns=['TrainPart', 'Actual', 'Predicted', 'MAPE'])
 
     """
-    Performs walk-forward validation by training on incremental subsets and predicting next month.
-    Adds proportion column like '6/12', '9/12', etc. and also MAPE column.
+    Splits features into training and test sets for walk-forward validation.
     """
-    def __walk_forward(self, x: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
-        predictions = []
-        actuals = []
-        mape_scores = []
-        proportions = []
-        total = len(x)
-        splits = [total // 2, (3 * total) // 4, total - 2, total - 1]
-        for split in splits:
-            train_x = x.iloc[:split]
-            train_y = y.iloc[:split]
-            test_x = x.iloc[split:split + 1]
-            test_y = y.iloc[split:split + 1]
-            proportion = f"{split}/{total}"
-            self.__model.fit(train_x, train_y)
-            prediction = self.__model.predict(test_x)[0]
-            actual = test_y.values[0]
-            mape = self.__mape(actual, prediction)
-            predictions.append(prediction)
-            actuals.append(actual)
-            mape_scores.append(mape)
-            proportions.append(proportion)
-        return pd.DataFrame({
-            'TrainPart': proportions,
-            'Actual': actuals,
-            'Predicted': predictions,
-            'MAPE': mape_scores
-        })
+    def __get_splits(self, total: int) -> List[int]:
+        return [total // 2, (3 * total) // 4, total - 2, total - 1]
+
+    """
+    Trains split and gets metrics of current model.
+    """
+    def __train_and_predict(self, x:pd.DataFrame, y:pd.Series, split:int, total:int) -> Tuple[str, float, float, float]:
+        train_x, train_y = x.iloc[:split], y.iloc[:split]
+        test_x, test_y = x.iloc[split:split + 1], y.iloc[split:split + 1]
+        proportion = f"{split}/{total}"
+        self.__model.fit(train_x, train_y)
+        pred = self.__model.predict(test_x)[0]
+        actual = test_y.values[0]
+        mape = self.__mape(actual, pred)
+        return proportion, actual, pred, mape
 
     """
     Calculates MAPE for a single actual and predicted value.
     """
-    def __mape(self, actual, predicted):
-        if actual == 0:
-            return None
-        return abs((actual - predicted) / actual) * 100
+    def __mape(self, actual, predicted) -> float:
+        return None if actual == 0 else abs((actual - predicted)/actual)*100
 
     """
-    Aligns features and target dataframes by common months and extracts relevant columns.
+    Prepares feature and target for prediction.
     """
-    def __process_to_equel_months(self, features: pd.DataFrame, target: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
+    def __process_to_equel_months(self, features: pd.DataFrame, target: pd.DataFrame) -> tuple:
         common_months = sorted(set(features['Month']) & set(target['Month']))
         features = features[features['Month'].isin(common_months)].reset_index(drop=True)
         target = target[target['Month'].isin(common_months)].reset_index(drop=True)
+        months = features['Month'].tolist()
         x = features.drop(columns=['Month'])
         y = target.iloc[:, 1]
-        return x, y
+        return x, y, months
