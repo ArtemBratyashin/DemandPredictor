@@ -9,9 +9,25 @@ from scripts.predict_target import predict_target
 from scripts.save_model import save_model
 
 """
-This is main file. Here you can see the examples of using projects code.
-Just choose short or long version via '#'
+This is main file. Here you can see the example of using projects code.
+You can see long version which I tried to make OOP style.
 """
+
+def short_example(model:Any, data_path:str, target:str, models_folder_path:str, model_name:str) -> str:
+    result =(
+        predict_target(
+            model_folder = (
+                save_model(
+                    model=model,
+                    data_path=data_path,
+                    target=target,
+                    models_folder_path=models_folder_path,
+                    model_name=model_name
+                )
+            )
+        )
+    )
+    return result
 
 def long_example(model:Any, data_path:str, target:str, models_folder_path:str, model_name:str) -> str:
     result = (
@@ -45,28 +61,11 @@ def long_example(model:Any, data_path:str, target:str, models_folder_path:str, m
     )
     return result
 
-def short_example(model:Any, data_path:str, target:str, models_folder_path:str, model_name:str) -> str:
-    result =(
-        predict_target(
-            model_folder = (
-                save_model(
-                    model=model,
-                    data_path=data_path,
-                    target=target,
-                    models_folder_path=models_folder_path,
-                    model_name=model_name
-                )
-            )
-        )
-    )
-    return result
-
 if __name__ == "__main__":
     print(
         f"There will be {
         int(
-            #short_example(
-            long_example(
+            short_example(
                 model=XGBRegressor(),
                 data_path="data/raw_data.csv", 
                 target="Deals", 
