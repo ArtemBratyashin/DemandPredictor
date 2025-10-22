@@ -3,14 +3,15 @@ from typing import Any
 
 from src.rawdata import RawData
 from src.features import Features
-from src.modeltrainer import ModelTrainer
+from src.model_trainer import ModelTrainer
 from src.predictor import Predictor
+from src.model_tester import ModelValidation
 from scripts.predict_target import predict_target
 from scripts.save_model import save_model
 
 """
 This is main file. Here you can see the examples of using projects code.
-Just choose short or long version by using '#'
+Just choose short or long version via '#'
 """
 
 def long_example(model:Any, data_path:str, target:str, models_folder_path:str, model_name:str) -> str:
