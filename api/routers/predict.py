@@ -28,8 +28,10 @@ Raises:
 def get_prediction():
     try:
         config = Config()
-        predictor = Predictor(config.model())
-        prediction = predictor.predict()
+        prediction = int(
+            Predictor(config.model())
+            .predict()
+        )
         return PredictionResponse(predicted_deals=prediction)
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))

@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from api.routers import predict
 
@@ -14,3 +15,6 @@ app = FastAPI(
     version="1.0.0"
 )
 app.include_router(predict.router)
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", reload=True)
