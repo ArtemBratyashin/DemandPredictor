@@ -42,7 +42,7 @@ if __name__ == "__main__":
                 data_path="../data/raw_data.csv", 
                 target="Deals", 
                 models_folder_path="../saved_models", 
-                model_name="xgb_model"
+                model_name="xgb_testing_model"
             )
         }"
     )
