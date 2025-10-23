@@ -4,7 +4,7 @@ from scripts.predict_target import predict_target
 from scripts.save_model import save_model
 
 """
-Main CLI for DemandPredictor project.
+Main CLI for DemandPredictor project. You can write only one string to run scripts. Just copy one of the line below to the terminal.
 
 Usage examples:
     python main.py predict --model_folder saved_models/xgb_model
