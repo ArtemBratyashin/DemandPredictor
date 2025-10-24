@@ -8,6 +8,8 @@ FastAPI application entry point.
 
 Usage:
     uvicorn api.main:app --reload
+    
+Run 'python -m http.server 8080' to start the server
 """
 
 app = FastAPI(
