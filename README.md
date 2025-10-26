@@ -154,12 +154,6 @@ python main.py train --data_path data/raw_data.csv --target Deals --models_folde
 python main.py predict --model_folder saved_models/xgb_model
 ```
 
-#### Валидация модели
-
-```bash
----
-```
-
 ---
 
 ### API
